@@ -65,7 +65,7 @@ DATABASES = {
         'NAME': 'mydb',  # اسم قاعدة البيانات التي أنشأتها
         'USER': 'myuser',  # اسم المستخدم
         'PASSWORD': 'zczc',  # كلمة المرور
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }

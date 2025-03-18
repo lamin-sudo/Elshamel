@@ -1,1 +1,11 @@
 Watching for file changes with StatReloader
+/home/lamin/Desktop/New folder (3)/Elshamel/accounting_system/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+March 18, 2025 - 23:56:43
+Django version 4.2, using settings 'accounting_system.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
