@@ -61,12 +61,15 @@ WSGI_APPLICATION = 'accounting_system.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'lamindz$default',  # اسم قاعدة البيانات التي أنشأتها
         'USER': 'lamindz',  # اسم المستخدم
         'PASSWORD': '$Li333Ryhs4g..x',  # كلمة المرور
         'HOST': 'lamindz.mysql.pythonanywhere-services.com',
         'PORT': '3306',
+        'OPTIONS': {
+            'ssl': {'ssl-mode': 'DISABLED'},  # تعطيل SSL لتجنب المشاكل
+        }
     }
 }
 
