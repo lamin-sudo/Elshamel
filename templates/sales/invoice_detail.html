@@ -1,0 +1,159 @@
+{% extends 'sales/base_sales.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'sales:invoice_list' %}">فواتير المبيعات</a></li>
+<li class="breadcrumb-item active">{{ invoice.number }}</li>
+{% endblock %}
+
+{% block sales_content %}
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">فاتورة مبيعات {{ invoice.number }}</h5>
+        <div>
+            {% if invoice.status == 'draft' %}
+            <a href="{{ invoice.get_admin_url }}" class="btn btn-primary">
+                <i class="fas fa-edit me-2"></i>
+                تعديل
+            </a>
+            {% endif %}
+            <button onclick="window.print()" class="btn btn-secondary">
+                <i class="fas fa-print me-2"></i>
+                طباعة
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row invoice-header">
+            <div class="col-md-6">
+                <h6>بيانات العميل</h6>
+                <p class="mb-1"><strong>العميل:</strong> {{ invoice.customer.name }}</p>
+                <p class="mb-1"><strong>العنوان:</strong> {{ invoice.customer.address }}</p>
+                <p class="mb-1"><strong>الهاتف:</strong> {{ invoice.customer.phone }}</p>
+                {% if invoice.customer.tax_number %}
+                <p class="mb-0"><strong>الرقم الضريبي:</strong> {{ invoice.customer.tax_number }}</p>
+                {% endif %}
+            </div>
+            <div class="col-md-6 text-md-end">
+                <h6>بيانات الفاتورة</h6>
+                <p class="mb-1"><strong>التاريخ:</strong> {{ invoice.date }}</p>
+                <p class="mb-1"><strong>تاريخ الاستحقاق:</strong> {{ invoice.due_date }}</p>
+                <p class="mb-1">
+                    <strong>الحالة:</strong>
+                    {% if invoice.status == 'draft' %}
+                    <span class="badge bg-warning">مسودة</span>
+                    {% elif invoice.status == 'posted' %}
+                    <span class="badge bg-success">مرحلة</span>
+                    {% else %}
+                    <span class="badge bg-danger">ملغاة</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>الصنف</th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>الضريبة %</th>
+                        <th>الخصم</th>
+                        <th>الإجمالي</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for line in invoice.lines.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ line.product.name }}</td>
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.unit_price }} ج.م</td>
+                        <td>{{ line.tax_rate }}%</td>
+                        <td>{{ line.discount_amount }} ج.م</td>
+                        <td>{{ line.total }} ج.م</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>الإجمالي قبل الضريبة:</strong></td>
+                        <td>{{ invoice.subtotal }} ج.م</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>قيمة الضريبة:</strong></td>
+                        <td>{{ invoice.tax_amount }} ج.م</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-end"><strong>الخصم:</strong></td>
+                        <td>{{ invoice.discount_amount }} ج.م</td>
+                    </tr>
+                    <tr class="table-primary">
+                        <td colspan="6" class="text-end"><strong>إجمالي الفاتورة:</strong></td>
+                        <td><strong>{{ invoice.total_amount }} ج.م</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        {% if invoice.notes %}
+        <div class="mt-4">
+            <h6>ملاحظات</h6>
+            <p class="mb-0">{{ invoice.notes }}</p>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card-footer text-muted">
+        <small>تم الإنشاء بواسطة: {{ invoice.created_by.get_full_name|default:invoice.created_by.username }} - {{ invoice.created_at }}</small>
+    </div>
+</div>
+
+{% if invoice.status == 'posted' %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title mb-0">القيود المحاسبية</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>الحساب</th>
+                        <th>مدين</th>
+                        <th>دائن</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in invoice.journal_entries.all %}
+                    <tr>
+                        <td>{{ entry.account.name }}</td>
+                        <td>{% if entry.entry_type == 'debit' %}{{ entry.amount }}{% endif %}</td>
+                        <td>{% if entry.entry_type == 'credit' %}{{ entry.amount }}{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+{{ block.super }}
+<style>
+@media print {
+    .btn, .navbar, .breadcrumb {
+        display: none !important;
+    }
+    .card {
+        border: none !important;
+    }
+    .card-header {
+        background: none !important;
+        padding: 0 !important;
+    }
+}
+</style>
+{% endblock %}

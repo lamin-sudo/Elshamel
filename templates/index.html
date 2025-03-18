@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h3 mb-4">{{ title }}</h1>
+        </div>
+    </div>
+
+    {% if error_message %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error_message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="dashboard-widget">
+                <div class="icon text-primary">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="title">المبيعات اليومية</div>
+                <div class="value">{{ daily_sales|default:0|floatformat:2 }} ج.م</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-widget">
+                <div class="icon text-success">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <div class="title">الأرباح</div>
+                <div class="value">0.00 ج.م</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-widget">
+                <div class="icon text-info">
+                    <i class="fas fa-boxes"></i>
+                </div>
+                <div class="title">المنتجات</div>
+                <div class="value">{{ total_products|default:0 }}</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="dashboard-widget">
+                <div class="icon text-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="title">منتجات قليلة المخزون</div>
+                <div class="value">{{ low_stock_products|default:0 }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">إجراءات سريعة</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'sales:invoice_create' %}" class="btn btn-primary w-100">
+                                <i class="fas fa-plus-circle me-2"></i>
+                                فاتورة مبيعات
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="{% url 'purchases:invoice_create' %}" class="btn btn-success w-100">
+                                <i class="fas fa-plus-circle me-2"></i>
+                                فاتورة مشتريات
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/admin/inventory/product/add/" class="btn btn-info w-100">
+                                <i class="fas fa-plus-circle me-2"></i>
+                                منتج جديد
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="/admin/accounts/journalentry/add/" class="btn btn-warning w-100">
+                                <i class="fas fa-plus-circle me-2"></i>
+                                قيد يومية جديد
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">آخر المبيعات</h5>
+                    <a href="{% url 'sales:invoice_list' %}" class="btn btn-sm btn-primary">عرض الكل</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>التاريخ</th>
+                                    <th>العميل</th>
+                                    <th>المبلغ</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recent_sales %}
+                                    {% for invoice in recent_sales %}
+                                    <tr>
+                                        <td><a href="{% url 'sales:invoice_detail' invoice.pk %}">{{ invoice.number }}</a></td>
+                                        <td>{{ invoice.date }}</td>
+                                        <td>{{ invoice.customer.name }}</td>
+                                        <td>{{ invoice.total_amount|floatformat:2 }} ج.م</td>
+                                        <td>
+                                            {% if invoice.status == 'draft' %}
+                                            <span class="badge bg-warning">مسودة</span>
+                                            {% elif invoice.status == 'posted' %}
+                                            <span class="badge bg-success">مرحلة</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">ملغاة</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">لا توجد مبيعات حديثة</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">آخر المشتريات</h5>
+                    <a href="{% url 'purchases:invoice_list' %}" class="btn btn-sm btn-primary">عرض الكل</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>التاريخ</th>
+                                    <th>المورد</th>
+                                    <th>المبلغ</th>
+                                    <th>الحالة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if recent_purchases %}
+                                    {% for invoice in recent_purchases %}
+                                    <tr>
+                                        <td><a href="{% url 'purchases:invoice_detail' invoice.pk %}">{{ invoice.number }}</a></td>
+                                        <td>{{ invoice.date }}</td>
+                                        <td>{{ invoice.supplier.name }}</td>
+                                        <td>{{ invoice.total_amount|floatformat:2 }} ج.م</td>
+                                        <td>
+                                            {% if invoice.status == 'draft' %}
+                                            <span class="badge bg-warning">مسودة</span>
+                                            {% elif invoice.status == 'posted' %}
+                                            <span class="badge bg-success">مرحلة</span>
+                                            {% else %}
+                                            <span class="badge bg-danger">ملغاة</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center">لا توجد مشتريات حديثة</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

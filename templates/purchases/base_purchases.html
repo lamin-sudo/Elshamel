@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">الرئيسية</a></li>
+                    <li class="breadcrumb-item active">المشتريات</li>
+                    {% block breadcrumb %}{% endblock %}
+                </ol>
+            </nav>
+            <h1 class="h3 mb-2">{% block page_title %}{{ title }}{% endblock %}</h1>
+        </div>
+    </div>
+    {% block purchases_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .invoice-header {
+        border-bottom: 2px solid #dee2e6;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+    }
+    .invoice-total {
+        border-top: 2px solid #dee2e6;
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+    }
+    .table th {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        // Calculate line totals
+        function calculateLineTotal() {
+            $('.invoice-line').each(function() {
+                var quantity = parseFloat($(this).find('.quantity').val()) || 0;
+                var price = parseFloat($(this).find('.price').val()) || 0;
+                var total = quantity * price;
+                $(this).find('.line-total').text(total.toFixed(2));
+            });
+            calculateInvoiceTotal();
+        }
+
+        // Calculate invoice total
+        function calculateInvoiceTotal() {
+            var subtotal = 0;
+            $('.line-total').each(function() {
+                subtotal += parseFloat($(this).text()) || 0;
+            });
+            
+            var taxRate = parseFloat($('#tax_rate').val()) || 0;
+            var taxAmount = subtotal * (taxRate / 100);
+            var discount = parseFloat($('#discount_amount').val()) || 0;
+            var total = subtotal + taxAmount - discount;
+
+            $('#subtotal').text(subtotal.toFixed(2));
+            $('#tax_amount_display').text(taxAmount.toFixed(2));
+            $('#total_amount').text(total.toFixed(2));
+        }
+
+        // Add new line
+        $('#add_line').click(function() {
+            var newLine = $('.invoice-line:first').clone();
+            newLine.find('input').val('');
+            newLine.find('.line-total').text('0.00');
+            $('#invoice_lines').append(newLine);
+        });
+
+        // Remove line
+        $(document).on('click', '.remove-line', function() {
+            if ($('.invoice-line').length > 1) {
+                $(this).closest('.invoice-line').remove();
+                calculateInvoiceTotal();
+            }
+        });
+
+        // Recalculate on input change
+        $(document).on('input', '.quantity, .price, #tax_rate, #discount_amount', calculateLineTotal);
+
+        // Initialize calculations
+        calculateLineTotal();
+    });
+</script>
+{% endblock %}
