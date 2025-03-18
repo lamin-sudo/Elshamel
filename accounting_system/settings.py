@@ -62,11 +62,11 @@ WSGI_APPLICATION = 'accounting_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',  # اسم قاعدة البيانات التي أنشأتها
-        'USER': 'myuser',  # اسم المستخدم
-        'PASSWORD': 'zczc',  # كلمة المرور
-        'HOST': 'myuser.postgres.pythonanywhere-services.com',
-        'PORT': '5432',
+        'NAME': 'lamindz$default',  # اسم قاعدة البيانات التي أنشأتها
+        'USER': 'lamindz',  # اسم المستخدم
+        'PASSWORD': '$Li333Ryhs4g..x',  # كلمة المرور
+        'HOST': 'lamindz.mysql.pythonanywhere-services.com',
+        'PORT': '3306',
     }
 }
 
