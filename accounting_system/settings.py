@@ -69,6 +69,7 @@ DATABASES = {
         'PORT': '3306',
         'OPTIONS': {
             'ssl': {'ssl-mode': 'DISABLED'},  # تعطيل SSL لتجنب المشاكل
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
     }
 }
