@@ -19,7 +19,7 @@ It provides detailed financial reports, stock tracking, and user-friendly dashbo
 
 ```bash
 git clone https://github.com/loma-gerhold/Elshamel.git
-cd your-repository
+cd Elshamel
 ```
 2️⃣ Create & Activate Virtual Environment
 
