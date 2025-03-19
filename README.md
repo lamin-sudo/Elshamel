@@ -89,7 +89,7 @@ For major changes, please open an issue first to discuss what you'd like to impr
 For any inquiries or support, contact me at:
 
 📧 lamindzru@gmail.com
-🌍 [Your Website](https://files.dz-gsmdz.site/)
+🌍 [MY Website](https://files.dz-gsmdz.site/)
 
 
 
