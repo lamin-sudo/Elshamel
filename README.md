@@ -22,29 +22,26 @@ It provides detailed financial reports, stock tracking, and user-friendly dashbo
 ## ⚙️ Installation & Setup
 ### 1️⃣ Clone the Repository
 
-## Bash Commands
-```bash
+
 git clone https://github.com/your-username/your-repository.git
 cd your-repository
 
+
 2️⃣ Create & Activate Virtual Environment
 
-## Bash Commands
-```bash
+
 python -m venv venv
 source venv/bin/activate   # On macOS/Linux
 venv\Scripts\activate      # On Windows
 
 3️⃣ Install Dependencies
 
-## Bash Commands
-```bash
+
 pip install -r requirements.txt
 
 4️⃣ Apply Migrations & Run Server
 
-## Bash Commands
-```bash
+
 python manage.py migrate
 python manage.py runserver
 
@@ -54,8 +51,7 @@ Now, open your browser and visit: http://127.0.0.1:8000/ 🎉
 1️⃣ Push Your Project to GitHub
 If you haven't pushed your project yet, run the following:
 
-## Bash Commands
-```bash
+
 git init
 git add .
 git commit -m "Initial commit"
@@ -68,13 +64,11 @@ Log in to PythonAnywhere and go to the Web section.
 Create a new web app → Choose Manual Configuration → Select Python 3.x.
 Upload your code via Git:
 
-## Bash Commands
-```bash
+
 git clone https://github.com/your-username/your-repository.git
 Set up the virtual environment:
 
-## Bash Commands
-```bash
+
 cd your-repository
 python -m venv venv
 source venv/bin/activate
