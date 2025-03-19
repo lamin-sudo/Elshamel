@@ -21,9 +21,11 @@ It provides detailed financial reports, stock tracking, and user-friendly dashbo
 git clone https://github.com/your-username/your-repository.git
 cd your-repository
 ```
-
-```bash
 2️⃣ Create & Activate Virtual Environment
 On macOS/Linux:
+```bash
+python -m venv venv
+source venv/bin/activate
 ```
+
 
