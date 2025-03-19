@@ -18,7 +18,7 @@ It provides detailed financial reports, stock tracking, and user-friendly dashbo
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
+[git clone https://github.com/your-username/your-repository.git](https://github.com/loma-gerhold/Elshamel.git)
 cd your-repository
 ```
 2️⃣ Create & Activate Virtual Environment
