@@ -28,5 +28,31 @@ cd your-repository
 python -m venv venv
 source venv/bin/activate
 ```
+- **On Windows:
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+3️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+4️⃣ Apply Migrations & Run Server
+
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+Now, open your browser and visit: http://127.0.0.1:8000/ 🎉
+
+🌍 Deploying on PythonAnywhere
+
+1️⃣ Push Your Project to GitHub
+If you haven't pushed your project yet, run the following:
+
+
+
+
 
 
