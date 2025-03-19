@@ -22,7 +22,8 @@ git clone https://github.com/your-username/your-repository.git
 cd your-repository
 ```
 2️⃣ Create & Activate Virtual Environment
-On macOS/Linux:
+
+- **On macOS/Linux:
 ```bash
 python -m venv venv
 source venv/bin/activate
